@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Optional, Sequence
 
 from esmerald import Esmerald
 from sqladmin import Admin as SQLAdmin
@@ -19,11 +19,11 @@ class Admin(SQLAdmin):
         engine: ENGINE_TYPE,
         base_url: str = "/admin",
         title: str = "Admin",
-        logo_url: str | None = None,
-        middlewares: Sequence[Middleware] | None = None,
+        logo_url: Optional[str] = None,
+        middlewares: Optional[Sequence[Middleware]] = None,
         debug: bool = False,
         templates_dir: str = "templates",
-        authentication_backend: AuthenticationBackend | None = None,
+        authentication_backend: Optional[AuthenticationBackend] = None,
     ) -> None:
         super().__init__(
             app,
