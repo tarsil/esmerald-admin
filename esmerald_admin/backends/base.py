@@ -1,12 +1,10 @@
 from datetime import datetime, timedelta
-from typing import Any, Optional, Type
+from typing import Any, Optional
 
 from esmerald import Request
 from esmerald.exceptions import AuthenticationError, NotAuthorized
-from esmerald.middleware.authentication import AuthResult, BaseAuthMiddleware
 from esmerald.security.jwt.token import Token
 from jose import JWSError, JWTError
-from saffier import Model
 from saffier.exceptions import DoesNotFound
 from sqladmin.authentication import AuthenticationBackend
 from starlette.responses import RedirectResponse
@@ -14,18 +12,18 @@ from starlette.responses import RedirectResponse
 DEFAULT_HEADER = "Bearer"
 
 
-class EmailAdminAuth(AuthenticationBackend, BaseAuthMiddleware):
+class BaseAuthentication(AuthenticationBackend):
     """
     Uses the AuthenticationProtocol from esmerald_admin assuming it is using the
     Esmerald contrib user and login into the admin.
     """
 
-    def __init__(self, secret_key: str, auth_model: Type["Model"], config: Any) -> None:
+    def __init__(self, secret_key: str, auth_model: Any, config: Any) -> None:
         super().__init__(secret_key)
         self.auth_model = auth_model
         self.config = config
 
-    def generate_user_token(self, user: Type["Model"], time=None):
+    def generate_user_token(self, user: Any, time=None):
         """
         Generates the JWT token for the authenticated user.
         """
@@ -44,34 +42,20 @@ class EmailAdminAuth(AuthenticationBackend, BaseAuthMiddleware):
         """
         return getattr(user, "is_active", True)
 
-    async def login(self, request: Request) -> bool:
-        form = await request.form()
-        email, password = form["username"], form["password"]
-
-        try:
-            user = await self.auth_model.query.get(email=email)
-        except DoesNotFound:
-            return False
-
-        is_password_valid = await user.check_password(password)
-        if is_password_valid and self.is_user_able_to_authenticate(user):
-            time = datetime.now() + self.config.access_token_lifetime
-            token = self.generate_user_token(user, time=time)
-            request.session.update({"token": token})
-            return True
-
-        return False
+    def is_user_staff_and_superuser(self, user):
+        """Checks if a user is staff and superuser to acess the admin"""
+        return bool(user.is_staff and user.is_superuser)
 
     async def clear_session(self, request: Request) -> None:
         """Clears the login sessions form the browser"""
         request.session.clear()
 
-    async def logout(self, request: Request) -> bool:
+    async def logout(self, request: Request) -> bool:  # type: ignore
         """Logout from the admin"""
         await self.clear_session(request)
         return True
 
-    async def retrieve_user(self, token_sub: Any) -> Type["Model"]:
+    async def retrieve_user(self, token_sub: Any) -> Any:
         """
         Retrieves a user from the database using the given token id.
         """
@@ -89,7 +73,7 @@ class EmailAdminAuth(AuthenticationBackend, BaseAuthMiddleware):
         except Exception as e:
             raise AuthenticationError(detail=str(e)) from e
 
-    async def authenticate(self, request: Request) -> Optional[RedirectResponse]:
+    async def authenticate(self, request: Request) -> Optional[RedirectResponse]:  # type: ignore
         """Authenticates the user and adds to the scope of the application"""
         token = request.session.get("token")
 
@@ -118,4 +102,3 @@ class EmailAdminAuth(AuthenticationBackend, BaseAuthMiddleware):
         user = await self.retrieve_user(token.sub)
         if not user:
             raise AuthenticationError("User not found.")
-        return AuthResult(user=user)
