@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
-from typing import Any, Optional, Union
+from typing import Any, Optional
 
 from esmerald import Request
 from esmerald.exceptions import AuthenticationError, NotAuthorized
-from esmerald.middleware.authentication import AuthResult, BaseAuthMiddleware
 from esmerald.security.jwt.token import Token
 from jose import JWSError, JWTError
 from saffier.exceptions import DoesNotFound
@@ -13,7 +12,7 @@ from starlette.responses import RedirectResponse
 DEFAULT_HEADER = "Bearer"
 
 
-class BaseAuthentication(AuthenticationBackend, BaseAuthMiddleware):
+class BaseAuthentication(AuthenticationBackend):
     """
     Uses the AuthenticationProtocol from esmerald_admin assuming it is using the
     Esmerald contrib user and login into the admin.
@@ -74,7 +73,7 @@ class BaseAuthentication(AuthenticationBackend, BaseAuthMiddleware):
         except Exception as e:
             raise AuthenticationError(detail=str(e)) from e
 
-    async def authenticate(self, request: Request) -> Union[AuthResult, Optional[RedirectResponse]]:  # type: ignore
+    async def authenticate(self, request: Request) -> Optional[RedirectResponse]:  # type: ignore
         """Authenticates the user and adds to the scope of the application"""
         token = request.session.get("token")
 
@@ -103,5 +102,3 @@ class BaseAuthentication(AuthenticationBackend, BaseAuthMiddleware):
         user = await self.retrieve_user(token.sub)
         if not user:
             raise AuthenticationError("User not found.")
-
-        return AuthResult(user=user)
