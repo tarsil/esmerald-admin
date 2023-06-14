@@ -40,6 +40,7 @@ classifiers = [
 dependencies = [
     "esmerald[jwt]>=1.2.5",
     "pydantic>=1.10.9,<2.0",
+    "saffier>=0.11.0",
     "sqladmin>=0.11.0,<1.0",
 ]
 keywords = ["esmerald_admin"]
