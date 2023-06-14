@@ -8,21 +8,21 @@ theme:
       language: en
       palette:
             - scheme: "default"
-              primary: "purple"
-              accent: "amber"
+              primary: "white"
+              accent: "black"
               media: "(prefers-color-scheme: light)"
               toggle:
                     icon: "material/lightbulb"
                     name: "Switch to dark mode"
             - scheme: "slate"
               media: "(prefers-color-scheme: dark)"
-              primary: "purple"
-              accent: "amber"
+              primary: "black"
+              accent: "white"
               toggle:
                     icon: "material/lightbulb-outline"
                     name: "Switch to light mode"
-      favicon: statics/images/favicon.ico
-      logo: statics/images/logo-white.svg
+      favicon: https://esmerald.dev/statics/images/favicon.ico
+      logo: https://res.cloudinary.com/dymmond/image/upload/v1671718394/esmerald/img/logo-black_tddod0.png
       features:
             - search.suggest
             - search.highlight
