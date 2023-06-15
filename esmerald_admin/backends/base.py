@@ -101,4 +101,5 @@ class BaseAuthentication(AuthenticationBackend):
 
         user = await self.retrieve_user(token.sub)
         if not user:
+            await self.clear_session(request)
             raise AuthenticationError("User not found.")

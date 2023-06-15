@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "esmerald_admin"
-description = "The needed admin for Saffier ORM"
-long_description = "The needed admin for Saffier ORM"
+description = "The needed admin for Saffier ORM with Esmerald"
+long_description = "The needed admin for Saffier ORM with Esmerald"
 readme = "README.md"
 requires-python = ">=3.8"
 dynamic = ['version']
@@ -41,7 +41,7 @@ dependencies = [
     "esmerald[jwt]>=1.2.5",
     "pydantic>=1.10.9,<2.0",
     "saffier>=0.11.0",
-    "sqladmin>=0.11.0,<1.0",
+    "sqladmin>=0.12.0,<1.0",
 ]
 keywords = ["esmerald_admin"]
 
@@ -63,7 +63,7 @@ test = [
     "pytest-cov>=4.0.0,<5.0.0",
     "requests>=2.28.2",
     "ruff>=0.0.256,<1.0.0",
-    "saffier[postgres,testing]>=0.11.0",
+    "saffier[postgres,testing]>=0.12.0",
 ]
 
 dev = [
