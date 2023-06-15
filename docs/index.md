@@ -75,6 +75,61 @@ models for anything else.
 
 See the [declarative models][saffier_declarative] for more details on this.
 
+Let us create a some Saffier models first. This example assumes you use the [contrib user][https://esmerald.dev/databases/saffier/models/]
+from Esmerald.
+
+!!! Warning
+    Using the user provided by Esmerald is **not mandatory** and you can use your own design.
+    The documentation uses the one provided by Esmerald as it is easier to explain and use.
+
+```python
+{!> ../docs_src/quickstart/models.py !}
+```
+
+**Now using with Esmerald**
+
+Saffier, as mentioned before, has the [declarative models][saffier_declarative] ready to be used.
+These models are **only used for the admin**.
+
+```python
+{!> ../docs_src/quickstart/app.py !}
+```
+
+Or if you want some more "organised".
+
+=== "Settings"
+
+    ```python title="myproject/configs/settings.py"
+    {!> ../docs_src/quickstart/organised/settings.py !}
+    ```
+
+=== "Models"
+
+    ```python title="myproject/apps/accounts/models.py"
+    {!> ../docs_src/quickstart/organised/models.py !}
+    ```
+
+=== "Admin"
+
+    ```python title="myproject/admin.py"
+    {!> ../docs_src/quickstart/organised/admin.py !}
+    ```
+
+=== "Application"
+
+    ```python title="myproject/app.py"
+    {!> ../docs_src/quickstart/organised/app.py !}
+    ```
+
+Now visiting `/admin/` (with slash at the end) on your browser you can see the Esmerald admin interface.
+
+## Important
+
+As mentioned before, Esmerald admin is built on the top of [SQLAdmin][esmerald_admin]. Besides some
+unique features for Esmerald with Saffier that are documented here, **everything else should be checked**
+**in the [SQLAdmin][sqladmin] official documentation** as it works exactly the same.
+
+Massive thanks to the creator of the underlying package!
 
 [esmerald_admin]: https://esmerald-admin.tarsild.io
 [esmerald_repo]: https://github.com/tarsil/esmerald-admin

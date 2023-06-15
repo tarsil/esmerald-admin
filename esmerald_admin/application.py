@@ -1,11 +1,15 @@
 from typing import Optional, Sequence
 
 from esmerald import Esmerald
-from sqladmin import Admin as SQLAdmin
-from sqladmin import ModelView as ModelView  # noqa
+from sqladmin import Admin as SQLAdmin  # noqa
+from sqladmin import ModelView as SQLAModelView  # noqa
 from sqladmin._types import ENGINE_TYPE
 from sqladmin.authentication import AuthenticationBackend
 from starlette.middleware import Middleware
+
+
+class ModelView(SQLAModelView):
+    icon = "fa-solid fa-table"
 
 
 class Admin(SQLAdmin):

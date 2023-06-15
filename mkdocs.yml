@@ -38,6 +38,8 @@ plugins:
 
 nav:
       - Introduction: "index.md"
+      - Authentication: "authentication.md"
+      - Walk-through Example: "example.md"
       - Contributing: "contributing.md"
       - Sponsorship: "sponsorship.md"
       - Release Notes: "release-notes.md"
