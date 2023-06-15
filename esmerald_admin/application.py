@@ -18,7 +18,7 @@ class Admin(SQLAdmin):
         app: Esmerald,
         engine: ENGINE_TYPE,
         base_url: str = "/admin",
-        title: str = "Admin",
+        title: str = "Esmerald Administration",
         logo_url: Optional[str] = None,
         middlewares: Optional[Sequence[Middleware]] = None,
         debug: bool = False,
