@@ -132,74 +132,74 @@ admin.add_view(UserAdmin)
 
 Or if you want some more "organised".
 
-=== "Settings"
+**Settings**
 
-    ```python title="myproject/configs/settings.py"
-    from functools import cached_property
-    from typing import Optional
+```python
+from functools import cached_property
+from typing import Optional
 
-    from esmerald.conf.enums import EnvironmentType
-    from esmerald.conf.global_settings import EsmeraldAPISettings
-    from saffier import Database, Registry
-
-
-    class AppSettings(EsmeraldAPISettings):
-        app_name: str = "My application in production mode."
-        title: str = "My linezap"
-        environment: Optional[str] = EnvironmentType.PRODUCTION
-        secret_key: str = "esmerald-insecure-key"
-
-        @cached_property
-        def db_access(self):
-            database = Database("sqlite:///db.sqlite")
-            registry = Registry(database=database)
-            return database, registry
-    ```
-
-=== "Models"
-
-    ```python title="myproject/apps/accounts/models.py"
-    import saffier
-    from esmerald.conf import settings
-    from esmerald.contrib.auth.saffier.base_user import AbstractUser
-
-    database, models = settings.db_access
+from esmerald.conf.enums import EnvironmentType
+from esmerald.conf.global_settings import EsmeraldAPISettings
+from saffier import Database, Registry
 
 
-    class BaseModel(saffier.Model):
-        class Meta:
-            abstract = True
-            registry = models
+class AppSettings(EsmeraldAPISettings):
+    app_name: str = "My application in production mode."
+    title: str = "My linezap"
+    environment: Optional[str] = EnvironmentType.PRODUCTION
+    secret_key: str = "esmerald-insecure-key"
+
+    @cached_property
+    def db_access(self):
+        database = Database("sqlite:///db.sqlite")
+        registry = Registry(database=database)
+        return database, registry
+```
+
+**Models**
+
+```python
+import saffier
+from esmerald.conf import settings
+from esmerald.contrib.auth.saffier.base_user import AbstractUser
+
+database, models = settings.db_access
 
 
-    class User(BaseModel, AbstractUser):
-        """Inherits from the user base"""
-        ...
-    ```
-
-=== "Admin"
-
-    ```python title="myproject/admin.py"
-    from accounts.models import User as UserModel
-    from esmerald_admin import Admin, ModelView
-
-    # Declarative Models
-    User = UserModel.declarative()
+class BaseModel(saffier.Model):
+    class Meta:
+        abstract = True
+        registry = models
 
 
-    class UserAdmin(ModelView, model=User):
-        column_list = [User.id, User.username, User.email, User.first_name, User.last_name]
+class User(BaseModel, AbstractUser):
+    """Inherits from the user base"""
+    ...
+```
+
+**Admin**
+
+```python
+from accounts.models import User as UserModel
+from esmerald_admin import Admin, ModelView
+
+# Declarative Models
+User = UserModel.declarative()
 
 
-    def get_views(admin: Admin) -> None:
-        """Generates the admin views"""
-        admin.add_model_view(UserAdmin)
-    ```
+class UserAdmin(ModelView, model=User):
+    column_list = [User.id, User.username, User.email, User.first_name, User.last_name]
 
-=== "Application"
 
-    ```python title="myproject/app.py"
-    import os
+def get_views(admin: Admin) -> None:
+    """Generates the admin views"""
+    admin.add_model_view(UserAdmin)
+```
+
+**Application**
+
+```python
+import os
 import sys
 from pathlib import Path
 
@@ -219,41 +219,41 @@ def build_path():
         sys.path.append(os.path.join(SITE_ROOT, "apps"))
 
 
-    def get_admin(app, registry):
-        """Starts the saffier admin"""
-        from .admin import get_views
+def get_admin(app, registry):
+    """Starts the saffier admin"""
+    from .admin import get_views
 
-        admin = Admin(app, registry.engine)
+    admin = Admin(app, registry.engine)
 
-        # Get the views function from the "admin.py"
-        get_views(admin)
-
-
-    def get_application():
-        """
-        This is optional. The function is only used for organisation purposes.
-        """
-        build_path()
-
-        # Registry that comes from the "settings.py"
-        # This is Saffier related and centralised in the settings
-        # file, as per Esmerald design
-        database, registry = settings.db_access
-
-        app = Esmerald(
-            routes=[Include(namespace="linezap.urls")],
-            on_startup=[database.connect],
-            on_shutdown=[database.disconnect],
-        )
-
-        # Admin
-        get_admin(app, registry)
-
-        return app
+    # Get the views function from the "admin.py"
+    get_views(admin)
 
 
-    app = get_application()
-    ```
+def get_application():
+    """
+    This is optional. The function is only used for organisation purposes.
+    """
+    build_path()
+
+    # Registry that comes from the "settings.py"
+    # This is Saffier related and centralised in the settings
+    # file, as per Esmerald design
+    database, registry = settings.db_access
+
+    app = Esmerald(
+        routes=[Include(namespace="linezap.urls")],
+        on_startup=[database.connect],
+        on_shutdown=[database.disconnect],
+    )
+
+    # Admin
+    get_admin(app, registry)
+
+    return app
+
+
+app = get_application()
+```
 
 Now visiting `/admin/` (with slash at the end) on your browser you can see the Esmerald admin interface.
 
