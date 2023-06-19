@@ -263,7 +263,7 @@ As mentioned before, Esmerald admin is built on the top of [SQLAdmin][esmerald_a
 unique features for Esmerald with Saffier that are documented here, **everything else should be checked**
 **in the [SQLAdmin][sqladmin] official documentation** as it works exactly the same.
 
-Massive thanks to the creator of the underlying package!
+Massive thanks to [@aminalaee](https://github.com/aminalaee) to get this working so well and without his work, this would not be possible! ⭐️ Star his repo! ⭐️
 
 [esmerald_admin]: https://esmerald-admin.tarsild.io
 [esmerald_repo]: https://github.com/tarsil/esmerald-admin
