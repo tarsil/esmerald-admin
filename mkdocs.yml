@@ -3,74 +3,74 @@ site_description: The needed admin for Saffier ORM.
 site_url: https://esmerald-admin.tarsild.io
 
 theme:
-      name: "material"
-      custom_dir: docs/overrides
-      language: en
-      palette:
-            - scheme: "default"
-              primary: "white"
-              accent: "black"
-              media: "(prefers-color-scheme: light)"
-              toggle:
-                    icon: "material/lightbulb"
-                    name: "Switch to dark mode"
-            - scheme: "slate"
-              media: "(prefers-color-scheme: dark)"
-              primary: "black"
-              accent: "white"
-              toggle:
-                    icon: "material/lightbulb-outline"
-                    name: "Switch to light mode"
-      favicon: https://esmerald.dev/statics/images/favicon.ico
-      logo: https://res.cloudinary.com/dymmond/image/upload/v1671718394/esmerald/img/logo-black_tddod0.png
-      features:
-            - search.suggest
-            - search.highlight
-            - content.tabs.link
+        name: "material"
+        custom_dir: docs/overrides
+        language: en
+        palette:
+                - scheme: "default"
+                  primary: "white"
+                  accent: "black"
+                  media: "(prefers-color-scheme: light)"
+                  toggle:
+                          icon: "material/lightbulb"
+                          name: "Switch to dark mode"
+                - scheme: "slate"
+                  media: "(prefers-color-scheme: dark)"
+                  primary: "black"
+                  accent: "white"
+                  toggle:
+                          icon: "material/lightbulb-outline"
+                          name: "Switch to light mode"
+        favicon: https://esmerald.dev/statics/images/favicon.ico
+        logo: https://res.cloudinary.com/dymmond/image/upload/v1671718394/esmerald/img/logo-black_tddod0.png
+        features:
+                - search.suggest
+                - search.highlight
+                - content.tabs.link
 
 repo_name: tarsil/esmerald-admin
 repo_url: https://github.com/tarsil/esmerald-admin
 edit_uri: ""
 plugins:
-      - search
-      - markdownextradata:
-              data: data
+        - search
+        - markdownextradata:
+                  data: data
 
 nav:
-      - Introduction: "index.md"
-      - Authentication: "authentication.md"
-      - API Reference:
-              - Application: "application.md"
-              - ModelView: "model-view.md"
-      - Walk-through Example: "example.md"
-      - Contributing: "contributing.md"
-      - Sponsorship: "sponsorship.md"
-      - Release Notes: "release-notes.md"
+        - Introduction: "index.md"
+        - Authentication: "authentication.md"
+        - API Reference:
+                  - Application: "api/application.md"
+                  - ModelView: "api/model-view.md"
+        - Walk-through Example: "example.md"
+        - Contributing: "contributing.md"
+        - Sponsorship: "sponsorship.md"
+        - Release Notes: "release-notes.md"
 markdown_extensions:
-      - attr_list
-      - toc:
-              permalink: true
-      - markdown.extensions.codehilite:
-              guess_lang: false
-      - mdx_include:
-              base_path: docs
-      - admonition
-      - codehilite
-      - extra
-      - pymdownx.superfences:
-              custom_fences:
-                    - name: mermaid
-                      class: mermaid
-                      format: !!python/name:pymdownx.superfences.fence_code_format ""
-      - pymdownx.emoji:
-              emoji_index: !!python/name:materialx.emoji.twemoji
-              emoji_generator: !!python/name:materialx.emoji.to_svg
-      - pymdownx.tabbed:
-              alternate_style: true
-      - md_in_html
+        - attr_list
+        - toc:
+                  permalink: true
+        - markdown.extensions.codehilite:
+                  guess_lang: false
+        - mdx_include:
+                  base_path: docs
+        - admonition
+        - codehilite
+        - extra
+        - pymdownx.superfences:
+                  custom_fences:
+                          - name: mermaid
+                            class: mermaid
+                            format: !!python/name:pymdownx.superfences.fence_code_format ""
+        - pymdownx.emoji:
+                  emoji_index: !!python/name:materialx.emoji.twemoji
+                  emoji_generator: !!python/name:materialx.emoji.to_svg
+        - pymdownx.tabbed:
+                  alternate_style: true
+        - md_in_html
 
 extra:
-      alternate:
-            - link: /
-              name: English
-              lang: en
+        alternate:
+                - link: /
+                  name: English
+                  lang: en

@@ -8,7 +8,7 @@ from saffier import Database, Registry
 
 class AppSettings(EsmeraldAPISettings):
     app_name: str = "My application in production mode."
-    title: str = "My linezap"
+    title: str = "My app"
     environment: Optional[str] = EnvironmentType.PRODUCTION
     secret_key: str = "esmerald-insecure-key"
 
