@@ -39,10 +39,7 @@ plugins:
 nav:
         - Introduction: "index.md"
         - Authentication: "authentication.md"
-        - API Reference:
-                  - Application: "api/application.md"
-                  - ModelView: "api/model-view.md"
-        - Walk-through Example: "example.md"
+        - Walk Through Example: "example.md"
         - Contributing: "contributing.md"
         - Sponsorship: "sponsorship.md"
         - Release Notes: "release-notes.md"

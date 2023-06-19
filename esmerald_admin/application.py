@@ -6,12 +6,11 @@ from sqladmin import Admin as SQLAdmin  # noqa
 from sqladmin import ModelView as SQLAModelView  # noqa
 from sqladmin._types import ENGINE_TYPE
 from sqladmin.authentication import AuthenticationBackend
+from sqladmin.models import BaseView as SQLAdminBaseView  # noqa
 from starlette.middleware import Middleware
 
 
-class ModelView(SQLAModelView):
-    icon = "fa-solid fa-table"
-
+class EsmeraldBase:
     def is_accessible(self, request: Request) -> bool:  # type: ignore
         raise ImproperlyConfigured(
             "The `is_accessible` is not used by Esmerald Admin, please use `has_permission` instead."
@@ -26,6 +25,14 @@ class ModelView(SQLAModelView):
         of Esmerald permission system.
         """
         return True
+
+
+class BaseView(SQLAdminBaseView, EsmeraldBase):
+    ...
+
+
+class ModelView(SQLAModelView, BaseView):
+    ...
 
 
 class Admin(SQLAdmin):
