@@ -9,8 +9,8 @@
 </p>
 
 <p align="center">
-<a href="https://github.com/tarsil/esmerald_admin/workflows/Test%20Suite/badge.svg?event=push&branch=main" target="_blank">
-    <img src="https://github.com/tarsil/esmerald_admin/workflows/Test%20Suite/badge.svg?event=push&branch=main" alt="Test Suite">
+<a href="https://github.com/tarsil/esmerald-admin/workflows/Test%20Suite/badge.svg?event=push&branch=main" target="_blank">
+    <img src="https://github.com/tarsil/esmerald-admin/workflows/Test%20Suite/badge.svg?event=push&branch=main" alt="Test Suite">
 </a>
 
 <a href="https://pypi.org/project/esmerald_admin" target="_blank">
