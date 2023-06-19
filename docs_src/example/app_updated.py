@@ -54,7 +54,7 @@ def get_application():
     database, registry = settings.db_access
 
     app = Esmerald(
-        routes=[Include(namespace="linezap.urls")],
+        routes=[Include(namespace="myproject.urls")],
         on_startup=[database.connect],
         on_shutdown=[database.disconnect],
     )
