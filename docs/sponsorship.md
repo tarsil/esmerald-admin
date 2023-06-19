@@ -22,8 +22,6 @@ Following the GitHub repo will allow you to "watch" for any new release of Esmer
 You can click on "***watch***" and select "***custom***" -> "***Releases***"or any other you may find particular
 interesting to you.
 
-## 💬 Join the official Esmerald Admin discord channel
-
 ## 🔥 Sponsor the author
 
 The author built this framework with all of his heart and dedication and will continue to do it so but that also

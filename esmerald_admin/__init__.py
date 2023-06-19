@@ -1,5 +1,5 @@
 __version__ = "0.1.0"
 
-from .application import Admin, ModelView
+from .application import Admin, BaseView, ModelView
 
-__all__ = ["Admin", "ModelView"]
+__all__ = ["Admin", "BaseView", "ModelView"]
