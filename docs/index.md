@@ -75,9 +75,8 @@ models for anything else.
 
 See the [declarative models][saffier_declarative] for more details on this.
 
-Let us create a some Saffier models first. This example assumes you use the [contrib user][https://esmerald.dev/databases/saffier/models/]
+Let us create a some Saffier models first. This example assumes you use the [contrib user](https://esmerald.dev/databases/saffier/models/)
 from Esmerald.
-
 !!! Warning
     Using the user provided by Esmerald is **not mandatory** and you can use your own design.
     The documentation uses the one provided by Esmerald as it is easier to explain and use.
