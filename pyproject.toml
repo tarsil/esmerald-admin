@@ -38,8 +38,7 @@ classifiers = [
     "Topic :: Internet :: WWW/HTTP",
 ]
 dependencies = [
-    "esmerald[jwt]>=1.2.5",
-    "pydantic>=1.10.9,<2.0",
+    "esmerald[jwt]>=1.3.0",
     "saffier>=0.13.0",
     "sqladmin>=0.12.0,<1.0",
 ]
