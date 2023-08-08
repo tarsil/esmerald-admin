@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-    <em>The needed admin for Saffier ORM with Esmerald.</em>
+    <em>The needed admin for Saffier and Edgy with Esmerald.</em>
 </p>
 
 <p align="center">

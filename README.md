@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-    <em>The needed admin for Saffier ORM with Esmerald.</em>
+    <em>The needed admin for Saffier and Edgy with Esmerald.</em>
 </p>
 
 <p align="center">
@@ -30,18 +30,23 @@
 
 ---
 
-## Esmerald admin for [Saffier][saffier] ORM
+## Esmerald admin for [Saffier][saffier] and [Edgy][edgy]
 
-Esmerald admin is a flexible user interface for [Saffier ORM][saffier] built on the top of the
-already existing and highly maintained [SQLAdmin][sqladmin].
+Esmerald admin is a flexible user interface for [Saffier ORM][saffier] and [Edgy][edgy]
+built on the top of the already existing and highly maintained [SQLAdmin][sqladmin].
 
 The main goal, as the name of the package says, is to provide a nice, flexible and easy to use
-user interface that interacts with [Saffier ORM][saffier] in a more friendly manner.
+user interface that interacts with [Saffier][saffier] and [Edgy][edgy] in a more friendly manner.
 
 ## Saffier
 
 [Saffier][saffier] is a flexible and powerfull ORM built on the top of SQLAlchemy core that allows
 you to interact with almost every single SQL database out there in an asynchronous mode.
+
+## Edgy
+
+[Edgy][saffier] is also an extremely, flexible and powerful ORM built on the top of SQLAlchemy core
+and **100% Pydantic** with more flexibility for every single use case, also in asynchronous mode.
 
 ### Documentation
 
@@ -56,68 +61,118 @@ The custom, unique, Esmerald way is placed here within these docs.
 * SQLAlchemy sync/async engines
 * Esmerald integration
 * [Saffier][saffier] support
+* [Edgy][edgy] support
 * Modern UI using Tabler
 
 ## Installation
+
+**For Saffier**
 
 ```shell
 $ pip install esmerald-admin
 ```
 
+**For Edgy**
+
+```shell
+$ pip install esmerald-admin[edgy]
+```
+
+**For both**
+
+```shell
+$ pip install esmerald-admin[all]
+```
+
 ## Quickstart
 
-Saffier is a very powerfull ORM as mentioned before and built on the top of SQLAlchemy core but
+Saffier and Edgy are very powerfull ORMs as mentioned before and built on the top of SQLAlchemy core but
 also extremely flexible allowing to use the models in a `declarative` way, which is the way
 SQLAdmin is expecting to use.
 
-This makes Saffier unique since you can use the declarative models for the admin and the core
+This makes both Saffier and Edgy unique since you can use the declarative models for the admin and the core
 models for anything else.
 
-See the [declarative models][saffier_declarative] for more details on this.
+See the [Saffier declarative models][saffier_declarative] and [Edgy declarative models][edgy_declarative] for more details.
 
-Let us create a some Saffier models first. This example assumes you use the [contrib user](https://esmerald.dev/databases/saffier/models/)
+Let us create a some models first. This example assumes you use the [contrib user of Saffier](https://esmerald.dev/databases/saffier/models/)
+and the [contrib user of Edgy](https://esmerald.dev/databases/edgy/models/)
 from Esmerald.
 
 !!! Warning
     Using the user provided by Esmerald is **not mandatory** and you can use your own design.
     The documentation uses the one provided by Esmerald as it is easier to explain and use.
 
-```python
-import saffier
-from esmerald.contrib.auth.saffier.base_user import AbstractUser
-from saffier import Database, Registry
+=== "Saffier"
 
-database = Database("sqlite:///db.sqlite")
-registry = Registry(database=database)
+    ```python
+    import saffier
+    from esmerald.contrib.auth.saffier.base_user import AbstractUser
+    from saffier import Database, Registry
 
-
-class BaseModel(saffier.Model):
-    class Meta:
-        abstract = True
-        registry = registry
+    database = Database("sqlite:///db.sqlite")
+    registry = Registry(database=database)
 
 
-class User(BaseModel, AbstractUser):
-    """Inherits from the user base"""
+    class BaseModel(saffier.Model):
+        class Meta:
+            abstract = True
+            registry = registry
 
+
+    class User(BaseModel, AbstractUser):
+        """Inherits from the user base"""
     ...
 
 
 # Create the tables
 await registry.create_all()
-```
+
+    ```
+
+=== "Edgy"
+
+    ```python
+    import edgy
+    from edgy import Database, Registry
+    from esmerald.contrib.auth.edgy.base_user import AbstractUser
+
+    database = Database("sqlite:///db.sqlite")
+    registry = Registry(database=database)
+
+
+    class BaseModel(edgy.Model):
+        class Meta:
+            abstract = True
+            registry = registry
+
+
+    class User(BaseModel, AbstractUser):
+        """Inherits from the user base"""
+    ...
+
+
+# Create the tables
+await registry.create_all()
+
+    ```
 
 **Now using with Esmerald**
 
 Saffier, as mentioned before, has the [declarative models][saffier_declarative] ready to be used.
 These models are **only used for the admin**.
 
+
 ```python
-from esmerald import Esmerald
+from accounts.models import User
+from esmerald import Esmerald, settings
+
 from esmerald_admin import Admin, ModelView
 
+database, registry = settings.db_access
+
 app = Esmerald()
-admin = Admin(app, engine)
+admin = Admin(app, registry.engine)
 
 # Declarative User
 DeclarativeUser = User.declarative()
@@ -130,130 +185,122 @@ class UserAdmin(ModelView, model=DeclarativeUser):
 admin.add_view(UserAdmin)
 ```
 
+
 Or if you want some more "organised".
 
-**Settings**
+=== "Settings"
 
-```python
-from functools import cached_property
-from typing import Optional
+    ```python title="myproject/configs/settings.py"
+    from functools import cached_property
+    from typing import Optional
 
-from esmerald.conf.enums import EnvironmentType
-from esmerald.conf.global_settings import EsmeraldAPISettings
-from saffier import Database, Registry
-
-
-class AppSettings(EsmeraldAPISettings):
-    app_name: str = "My application in production mode."
-    title: str = "My app"
-    environment: Optional[str] = EnvironmentType.PRODUCTION
-    secret_key: str = "esmerald-insecure-key"
-
-    @cached_property
-    def db_access(self):
-        database = Database("sqlite:///db.sqlite")
-        registry = Registry(database=database)
-        return database, registry
-```
-
-**Models**
-
-```python
-import saffier
-from esmerald.conf import settings
-from esmerald.contrib.auth.saffier.base_user import AbstractUser
-
-database, models = settings.db_access
+    from esmerald.conf.enums import EnvironmentType
+    from esmerald.conf.global_settings import EsmeraldAPISettings
+    from saffier import Database, Registry # or from edgy import Database, Registry
 
 
-class BaseModel(saffier.Model):
-    class Meta:
-        abstract = True
-        registry = models
+    class AppSettings(EsmeraldAPISettings):
+        app_name: str = "My application in production mode."
+        title: str = "My app"
+        environment: Optional[str] = EnvironmentType.PRODUCTION
+        secret_key: str = "esmerald-insecure-key"
+
+        @cached_property
+        def db_access(self):
+            database = Database("sqlite:///db.sqlite")
+            registry = Registry(database=database)
+            return database, registry
+
+    ```
+
+=== "Saffier Models"
+
+    ```python title="myproject/apps/accounts/models.py"
+    import saffier
+    from esmerald.contrib.auth.saffier.base_user import AbstractUser
+    from saffier import Database, Registry
+
+    database = Database("sqlite:///db.sqlite")
+    registry = Registry(database=database)
 
 
-class User(BaseModel, AbstractUser):
-    """Inherits from the user base"""
-    ...
-```
-
-**Admin**
-
-```python
-from accounts.models import User as UserModel
-from esmerald_admin import Admin, ModelView
-
-# Declarative Models
-User = UserModel.declarative()
+    class BaseModel(saffier.Model):
+        class Meta:
+            abstract = True
+            registry = registry
 
 
-class UserAdmin(ModelView, model=User):
-    column_list = [User.id, User.username, User.email, User.first_name, User.last_name]
+    class User(BaseModel, AbstractUser):
+        """Inherits from the user base"""
+    ```
+
+=== "Edgy Models"
+
+    ```python title="myproject/apps/accounts/models.py"
+    import edgy
+    from edgy import Database, Registry
+    from esmerald.contrib.auth.edgy.base_user import AbstractUser
+
+    database = Database("sqlite:///db.sqlite")
+    registry = Registry(database=database)
 
 
-def get_views(admin: Admin) -> None:
-    """Generates the admin views"""
-    admin.add_model_view(UserAdmin)
-```
-
-**Application**
-
-```python
-import os
-import sys
-from pathlib import Path
-
-from esmerald import Esmerald, Include, settings
-from esmerald_admin import Admin
+    class BaseModel(edgy.Model):
+        class Meta:
+            abstract = True
+            registry = registry
 
 
-def build_path():
-    """
-    Builds the path of the project and project root.
-    """
-    Path(__file__).resolve().parent.parent
-    SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+    class User(BaseModel, AbstractUser):
+        """Inherits from the user base"""
+    ```
 
-    if SITE_ROOT not in sys.path:
-        sys.path.append(SITE_ROOT)
-        sys.path.append(os.path.join(SITE_ROOT, "apps"))
+=== "Admin"
 
+    ```python title="myproject/admin.py"
+    from accounts.models import User as UserModel
 
-def get_admin(app, registry):
-    """Starts the saffier admin"""
-    from .admin import get_views
+    from esmerald_admin import Admin, ModelView
 
-    admin = Admin(app, registry.engine)
-
-    # Get the views function from the "admin.py"
-    get_views(admin)
+    # Declarative Models
+    User = UserModel.declarative()
 
 
-def get_application():
-    """
-    This is optional. The function is only used for organisation purposes.
-    """
-    build_path()
+    class UserAdmin(ModelView, model=User):
+        column_list = [User.id, User.username, User.email, User.first_name, User.last_name]
 
-    # Registry that comes from the "settings.py"
-    # This is Saffier related and centralised in the settings
-    # file, as per Esmerald design
+
+    def get_views(admin: Admin) -> None:
+        """Generates the admin views and it is used in
+        the `main.py` file.
+        """
+        admin.add_model_view(UserAdmin)
+
+    ```
+
+=== "Application"
+
+    ```python title="myproject/app.py"
+    from accounts.models import User
+    from esmerald import Esmerald, settings
+
+    from esmerald_admin import Admin, ModelView
+
     database, registry = settings.db_access
 
-    app = Esmerald(
-        routes=[Include(namespace="linezap.urls")],
-        on_startup=[database.connect],
-        on_shutdown=[database.disconnect],
-    )
+    app = Esmerald()
+    admin = Admin(app, registry.engine)
 
-    # Admin
-    get_admin(app, registry)
-
-    return app
+    # Declarative User
+    DeclarativeUser = User.declarative()
 
 
-app = get_application()
-```
+    class UserAdmin(ModelView, model=DeclarativeUser):
+        column_list = [DeclarativeUser.id, DeclarativeUser.email]
+
+
+    admin.add_view(UserAdmin)
+    ```
 
 Now visiting `/admin/` (with slash at the end) on your browser you can see the Esmerald admin interface.
 
@@ -263,10 +310,14 @@ As mentioned before, Esmerald admin is built on the top of [SQLAdmin][esmerald_a
 unique features for Esmerald with Saffier that are documented here, **everything else should be checked**
 **in the [SQLAdmin][sqladmin] official documentation** as it works exactly the same.
 
-Massive thanks to [@aminalaee](https://github.com/aminalaee) to get this working so well and without his work, this would not be possible! ⭐️ Star his repo! ⭐️
+Massive thanks to [@aminalaee](https://github.com/aminalaee) to get this working so well and without his work, this
+would not be possible! ⭐️ Star his repo! ⭐️
+
 
 [esmerald_admin]: https://esmerald-admin.tarsild.io
 [esmerald_repo]: https://github.com/tarsil/esmerald-admin
 [saffier]: https://saffier.tarsild.io
+[edgy]: https://edgy.tarsild.io
 [sqladmin]: https://aminalaee.dev/sqladmin/
 [saffier_declarative]: https://saffier.tarsild.io/models/#declarative-models
+[edgy_declarative]: https://edgy.tarsild.io/models/#declarative-models
