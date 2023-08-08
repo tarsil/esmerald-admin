@@ -1,14 +1,14 @@
 from datetime import datetime
 
+from edgy.exceptions import ObjectNotFound
 from esmerald import Request
-from saffier.exceptions import DoesNotFound
 
-from esmerald_admin.backends.base import BaseAuthentication
+from esmerald_admin.backends.saffier.base import BaseAuthentication
 
 DEFAULT_HEADER = "Bearer"
 
 
-class UsernameAdminAuth(BaseAuthentication):
+class EmailAdminAuth(BaseAuthentication):
     """
     Uses the AuthenticationProtocol from esmerald_admin assuming it is using the
     Esmerald contrib user and login into the admin.
@@ -16,11 +16,11 @@ class UsernameAdminAuth(BaseAuthentication):
 
     async def login(self, request: Request) -> bool:  # type: ignore
         form = await request.form()
-        username, password = form["username"], form["password"]
+        email, password = form["username"], form["password"]
 
         try:
-            user = await self.auth_model.query.get(username=username)
-        except DoesNotFound:
+            user = await self.auth_model.query.get(email=email)
+        except ObjectNotFound:
             return False
 
         is_password_valid = await user.check_password(password)

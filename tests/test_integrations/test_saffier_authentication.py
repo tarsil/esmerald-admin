@@ -12,7 +12,7 @@ from saffier.testclient import DatabaseTestClient as Database
 from tests.settings import DATABASE_URL
 
 from esmerald_admin import Admin
-from esmerald_admin.backends import EmailAdminAuth, UsernameAdminAuth
+from esmerald_admin.backends.saffier import EmailAdminAuth, UsernameAdminAuth
 
 pytestmark = pytest.mark.anyio
 

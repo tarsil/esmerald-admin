@@ -30,18 +30,23 @@
 
 ---
 
-## Esmerald admin for [Saffier][saffier] ORM
+## Esmerald admin for [Saffier][saffier] and [Edgy][edgy]
 
-Esmerald admin is a flexible user interface for [Saffier ORM][saffier] built on the top of the
-already existing and highly maintained [SQLAdmin][sqladmin].
+Esmerald admin is a flexible user interface for [Saffier ORM][saffier] and [Edgy][edgy]
+built on the top of the already existing and highly maintained [SQLAdmin][sqladmin].
 
 The main goal, as the name of the package says, is to provide a nice, flexible and easy to use
-user interface that interacts with [Saffier ORM][saffier] in a more friendly manner.
+user interface that interacts with [Saffier][saffier] and [Edgy][edgy] in a more friendly manner.
 
 ## Saffier
 
 [Saffier][saffier] is a flexible and powerfull ORM built on the top of SQLAlchemy core that allows
 you to interact with almost every single SQL database out there in an asynchronous mode.
+
+## Edgy
+
+[Edgy][saffier] is also an extremely, flexible and powerful ORM built on the top of SQLAlchemy core
+and **100% Pydantic** with more flexibility for every single use case, also in asynchronous mode.
 
 ### Documentation
 
@@ -56,43 +61,70 @@ The custom, unique, Esmerald way is placed here within these docs.
 * SQLAlchemy sync/async engines
 * Esmerald integration
 * [Saffier][saffier] support
+* [Edgy][edgy] support
 * Modern UI using Tabler
 
 ## Installation
+
+**For Saffier**
 
 ```shell
 $ pip install esmerald-admin
 ```
 
+**For Edgy**
+
+```shell
+$ pip install esmerald-admin[edgy]
+```
+
+**For both**
+
+```shell
+$ pip install esmerald-admin[all]
+```
+
 ## Quickstart
 
-Saffier is a very powerfull ORM as mentioned before and built on the top of SQLAlchemy core but
+Saffier and Edgy are very powerfull ORMs as mentioned before and built on the top of SQLAlchemy core but
 also extremely flexible allowing to use the models in a `declarative` way, which is the way
 SQLAdmin is expecting to use.
 
-This makes Saffier unique since you can use the declarative models for the admin and the core
+This makes both Saffier and Edgy unique since you can use the declarative models for the admin and the core
 models for anything else.
 
-See the [declarative models][saffier_declarative] for more details on this.
+See the [Saffier declarative models][saffier_declarative] and [Edgy declarative models][edgy_declarative] for more details.
 
-Let us create a some Saffier models first. This example assumes you use the [contrib user](https://esmerald.dev/databases/saffier/models/)
+Let us create a some models first. This example assumes you use the [contrib user of Saffier](https://esmerald.dev/databases/saffier/models/)
+and the [contrib user of Edgy](https://esmerald.dev/databases/edgy/models/)
 from Esmerald.
+
 !!! Warning
     Using the user provided by Esmerald is **not mandatory** and you can use your own design.
     The documentation uses the one provided by Esmerald as it is easier to explain and use.
 
-```python
-{!> ../docs_src/quickstart/models.py !}
-```
+=== "Saffier"
+
+    ```python
+    {!> ../docs_src/quickstart/saffier_models.py !}
+    ```
+
+=== "Edgy"
+
+    ```python
+    {!> ../docs_src/quickstart/edgy_models.py !}
+    ```
 
 **Now using with Esmerald**
 
 Saffier, as mentioned before, has the [declarative models][saffier_declarative] ready to be used.
 These models are **only used for the admin**.
 
+
 ```python
 {!> ../docs_src/quickstart/app.py !}
 ```
+
 
 Or if you want some more "organised".
 
@@ -102,10 +134,16 @@ Or if you want some more "organised".
     {!> ../docs_src/quickstart/organised/settings.py !}
     ```
 
-=== "Models"
+=== "Saffier Models"
 
     ```python title="myproject/apps/accounts/models.py"
-    {!> ../docs_src/quickstart/organised/models.py !}
+    {!> ../docs_src/quickstart/organised/saffier_models.py !}
+    ```
+
+=== "Edgy Models"
+
+    ```python title="myproject/apps/accounts/models.py"
+    {!> ../docs_src/quickstart/organised/edgy_models.py !}
     ```
 
 === "Admin"
@@ -135,5 +173,7 @@ would not be possible! ⭐️ Star his repo! ⭐️
 [esmerald_admin]: https://esmerald-admin.tarsild.io
 [esmerald_repo]: https://github.com/tarsil/esmerald-admin
 [saffier]: https://saffier.tarsild.io
+[edgy]: https://edgy.tarsild.io
 [sqladmin]: https://aminalaee.dev/sqladmin/
 [saffier_declarative]: https://saffier.tarsild.io/models/#declarative-models
+[edgy_declarative]: https://edgy.tarsild.io/models/#declarative-models

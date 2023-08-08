@@ -1,10 +1,10 @@
+from edgy import Database, Registry
 from esmerald import Esmerald, EsmeraldAPISettings, Include
 from esmerald.config.jwt import JWTConfig
-from esmerald.contrib.auth.saffier.base_user import AbstractUser
-from saffier import Database, Registry
+from esmerald.contrib.auth.edgy.base_user import AbstractUser
 
 from esmerald_admin import Admin
-from esmerald_admin.backends.saffier.email import EmailAdminAuth
+from esmerald_admin.backends.edgy.email import EmailAdminAuth
 
 database = Database("sqlite:///db.sqlite")
 registry = Registry(database=database)

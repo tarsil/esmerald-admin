@@ -5,6 +5,8 @@ with some complexity and organisation.
 
 In this walk-through we will be also making sure we use as many Esmerald built-ins as possible.
 
+**The following example will be using Saffier but the same example is applied to Edgy**.
+
 ## What we will be using
 
 * [Esmerald directives][directives] - To generate a project scaffold with a given organisation.

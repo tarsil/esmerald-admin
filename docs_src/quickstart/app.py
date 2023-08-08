@@ -1,9 +1,12 @@
-from esmerald import Esmerald
+from accounts.models import User
+from esmerald import Esmerald, settings
 
 from esmerald_admin import Admin, ModelView
 
+database, registry = settings.db_access
+
 app = Esmerald()
-admin = Admin(app, engine)
+admin = Admin(app, registry.engine)
 
 # Declarative User
 DeclarativeUser = User.declarative()
