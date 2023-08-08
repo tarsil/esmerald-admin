@@ -2,10 +2,10 @@
 
 Like SQLAdmin, Esmerald Admin does not enfoce any authentication, but provides two out-of-the-box
 optional `EmailAdminAuth` and `UsernameAdminAuth` using the [Esmerald contrib auth][models] for
-Saffier that you can use.
+Saffier that you can use or [models][edgy_models] for Edgy.
 
 !!! Note
-    If you don't use the Esmerald models for Saffier, you can simply ignore this and use your own
+    If you don't use the Esmerald models for Saffier or Edgy, you can simply ignore this and use your own
     implementation and follow the instructions from the [SQLAdmin][sqladmin_models].
 
 
@@ -17,7 +17,7 @@ and apply logins using `email` or `username`, your choice.
 `EmailAdminAuth` and `UsernameAdminAuth` expect three parameters:
 
 * `secret_key` - The secret to be used with your auth.
-* `auth_model` - The class object of your `User`, usually derived from the [User model][user_model].
+* `auth_model` - The class object of your `User`, usually derived from the [User model][user_model] for Saffier or [User model][user_model_edgy] for Edgy.
 * `config` - The application settings object. It can be the [settings config][settings_config] or
 the application `settings` from `esmerald.conf`. It all depends of which one you use.
 
@@ -27,15 +27,31 @@ This is how you could use the backends in your Esmerald application. This exampl
 and it will use the [settings_config][settings_config] from Esmerald to simplify. This is not
 mandatory and you can use your preferred way.
 
-```python hl_lines="43-46"
-{!> ../docs_src/auth/example.py !}
-```
+=== "Saffier"
+
+    ```python hl_lines="43-46"
+    {!> ../docs_src/auth/example.py !}
+    ```
+
+=== "Edgy"
+
+    ```python hl_lines="43-46"
+    {!> ../docs_src/auth/edgy.py !}
+    ```
 
 To use the `UsernameAdminAuth` instead:
 
-```python
-from esmerald_admin.backends.username import UsernameAdminAuth
-```
+=== "Saffier"
+
+    ```python
+    from esmerald_admin.backends.saffier.username import UsernameAdminAuth
+    ```
+
+=== "Edgy"
+
+    ```python
+    from esmerald_admin.backends.edgy.username import UsernameAdminAuth
+    ```
 
 The `User` model as you can notice, is the one that derived from Esmerald and the reason for this
 is because the Esmerald models come with a lot of functionality already built-in such as password
@@ -70,12 +86,22 @@ override. These methods are used for the control of each Model/View in addition 
 
 Like SQLAdmin, both methods implement the same signature and should return a `bool`.
 
-```python hl_lines="43-46"
-{!> ../docs_src/auth/permissions.py !}
-```
+=== "Saffier"
+
+    ```python hl_lines="43-46"
+    {!> ../docs_src/auth/permissions.py !}
+    ```
+
+=== "Edgy"
+
+    ```python hl_lines="43-46"
+    {!> ../docs_src/auth/permissions_edgy.py !}
+    ```
 
 [models]: https://esmerald.dev/databases/saffier/models/
+[edgy_models]: https://esmerald.dev/databases/edgy/models/
 [user_model]: https://esmerald.dev/databases/saffier/models/#user
+[user_model_edgy]: https://esmerald.dev/databases/edgy/models/#user
 [sqladmin_models]: https://aminalaee.dev/sqladmin/authentication/
 [settings_config]: https://esmerald.dev/application/settings/#the-settings_config
 [permissions]: https://esmerald.dymmond.com/permissions/
