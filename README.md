@@ -103,59 +103,58 @@ from Esmerald.
     Using the user provided by Esmerald is **not mandatory** and you can use your own design.
     The documentation uses the one provided by Esmerald as it is easier to explain and use.
 
-=== "Saffier"
+**Saffier**
 
-    ```python
-    import saffier
-    from esmerald.contrib.auth.saffier.base_user import AbstractUser
-    from saffier import Database, Registry
+```python
+import saffier
+from esmerald.contrib.auth.saffier.base_user import AbstractUser
+from saffier import Database, Registry
 
-    database = Database("sqlite:///db.sqlite")
-    registry = Registry(database=database)
-
-
-    class BaseModel(saffier.Model):
-        class Meta:
-            abstract = True
-            registry = registry
+database = Database("sqlite:///db.sqlite")
+registry = Registry(database=database)
 
 
-    class User(BaseModel, AbstractUser):
-        """Inherits from the user base"""
-    ...
+class BaseModel(saffier.Model):
+    class Meta:
+        abstract = True
+        registry = registry
 
 
-# Create the tables
-await registry.create_all()
-
-    ```
-
-=== "Edgy"
-
-    ```python
-    import edgy
-    from edgy import Database, Registry
-    from esmerald.contrib.auth.edgy.base_user import AbstractUser
-
-    database = Database("sqlite:///db.sqlite")
-    registry = Registry(database=database)
-
-
-    class BaseModel(edgy.Model):
-        class Meta:
-            abstract = True
-            registry = registry
-
-
-    class User(BaseModel, AbstractUser):
-        """Inherits from the user base"""
-    ...
+class User(BaseModel, AbstractUser):
+    """Inherits from the user base"""
 
 
 # Create the tables
 await registry.create_all()
 
-    ```
+```
+
+**Edgy**
+
+```python
+import edgy
+from edgy import Database, Registry
+from esmerald.contrib.auth.edgy.base_user import AbstractUser
+
+database = Database("sqlite:///db.sqlite")
+registry = Registry(database=database)
+
+
+class BaseModel(edgy.Model):
+    class Meta:
+        abstract = True
+        registry = registry
+
+
+class User(BaseModel, AbstractUser):
+    """Inherits from the user base"""
+...
+
+
+# Create the tables
+await registry.create_all()
+
+```
 
 **Now using with Esmerald**
 
@@ -188,119 +187,119 @@ admin.add_view(UserAdmin)
 
 Or if you want some more "organised".
 
-=== "Settings"
+**Settings**
 
-    ```python title="myproject/configs/settings.py"
-    from functools import cached_property
-    from typing import Optional
+```python title="myproject/configs/settings.py"
+from functools import cached_property
+from typing import Optional
 
-    from esmerald.conf.enums import EnvironmentType
-    from esmerald.conf.global_settings import EsmeraldAPISettings
-    from saffier import Database, Registry # or from edgy import Database, Registry
-
-
-    class AppSettings(EsmeraldAPISettings):
-        app_name: str = "My application in production mode."
-        title: str = "My app"
-        environment: Optional[str] = EnvironmentType.PRODUCTION
-        secret_key: str = "esmerald-insecure-key"
-
-        @cached_property
-        def db_access(self):
-            database = Database("sqlite:///db.sqlite")
-            registry = Registry(database=database)
-            return database, registry
-
-    ```
-
-=== "Saffier Models"
-
-    ```python title="myproject/apps/accounts/models.py"
-    import saffier
-    from esmerald.contrib.auth.saffier.base_user import AbstractUser
-    from saffier import Database, Registry
-
-    database = Database("sqlite:///db.sqlite")
-    registry = Registry(database=database)
+from esmerald.conf.enums import EnvironmentType
+from esmerald.conf.global_settings import EsmeraldAPISettings
+from saffier import Database, Registry # or from edgy import Database, Registry
 
 
-    class BaseModel(saffier.Model):
-        class Meta:
-            abstract = True
-            registry = registry
+class AppSettings(EsmeraldAPISettings):
+    app_name: str = "My application in production mode."
+    title: str = "My app"
+    environment: Optional[str] = EnvironmentType.PRODUCTION
+    secret_key: str = "esmerald-insecure-key"
+
+    @cached_property
+    def db_access(self):
+        database = Database("sqlite:///db.sqlite")
+        registry = Registry(database=database)
+        return database, registry
+
+```
+
+**Saffier Models**
+
+```python title="myproject/apps/accounts/models.py"
+import saffier
+from esmerald.contrib.auth.saffier.base_user import AbstractUser
+from saffier import Database, Registry
+
+database = Database("sqlite:///db.sqlite")
+registry = Registry(database=database)
 
 
-    class User(BaseModel, AbstractUser):
-        """Inherits from the user base"""
-    ```
-
-=== "Edgy Models"
-
-    ```python title="myproject/apps/accounts/models.py"
-    import edgy
-    from edgy import Database, Registry
-    from esmerald.contrib.auth.edgy.base_user import AbstractUser
-
-    database = Database("sqlite:///db.sqlite")
-    registry = Registry(database=database)
+class BaseModel(saffier.Model):
+    class Meta:
+        abstract = True
+        registry = registry
 
 
-    class BaseModel(edgy.Model):
-        class Meta:
-            abstract = True
-            registry = registry
+class User(BaseModel, AbstractUser):
+    """Inherits from the user base"""
+```
+
+**Edgy Models**
+
+```python title="myproject/apps/accounts/models.py"
+import edgy
+from edgy import Database, Registry
+from esmerald.contrib.auth.edgy.base_user import AbstractUser
+
+database = Database("sqlite:///db.sqlite")
+registry = Registry(database=database)
 
 
-    class User(BaseModel, AbstractUser):
-        """Inherits from the user base"""
-    ```
-
-=== "Admin"
-
-    ```python title="myproject/admin.py"
-    from accounts.models import User as UserModel
-
-    from esmerald_admin import Admin, ModelView
-
-    # Declarative Models
-    User = UserModel.declarative()
+class BaseModel(edgy.Model):
+    class Meta:
+        abstract = True
+        registry = registry
 
 
-    class UserAdmin(ModelView, model=User):
-        column_list = [User.id, User.username, User.email, User.first_name, User.last_name]
+class User(BaseModel, AbstractUser):
+    """Inherits from the user base"""
+```
+
+**Admin**
+
+```python title="myproject/admin.py"
+from accounts.models import User as UserModel
+
+from esmerald_admin import Admin, ModelView
+
+# Declarative Models
+User = UserModel.declarative()
 
 
-    def get_views(admin: Admin) -> None:
-        """Generates the admin views and it is used in
-        the `main.py` file.
-        """
-        admin.add_model_view(UserAdmin)
-
-    ```
-
-=== "Application"
-
-    ```python title="myproject/app.py"
-    from accounts.models import User
-    from esmerald import Esmerald, settings
-
-    from esmerald_admin import Admin, ModelView
-
-    database, registry = settings.db_access
-
-    app = Esmerald()
-    admin = Admin(app, registry.engine)
-
-    # Declarative User
-    DeclarativeUser = User.declarative()
+class UserAdmin(ModelView, model=User):
+    column_list = [User.id, User.username, User.email, User.first_name, User.last_name]
 
 
-    class UserAdmin(ModelView, model=DeclarativeUser):
-        column_list = [DeclarativeUser.id, DeclarativeUser.email]
+def get_views(admin: Admin) -> None:
+    """Generates the admin views and it is used in
+    the `main.py` file.
+    """
+    admin.add_model_view(UserAdmin)
+
+```
+
+**Application**
+
+```python title="myproject/app.py"
+from accounts.models import User
+from esmerald import Esmerald, settings
+
+from esmerald_admin import Admin, ModelView
+
+database, registry = settings.db_access
+
+app = Esmerald()
+admin = Admin(app, registry.engine)
+
+# Declarative User
+DeclarativeUser = User.declarative()
 
 
-    admin.add_view(UserAdmin)
-    ```
+class UserAdmin(ModelView, model=DeclarativeUser):
+    column_list = [DeclarativeUser.id, DeclarativeUser.email]
+
+
+admin.add_view(UserAdmin)
+```
 
 Now visiting `/admin/` (with slash at the end) on your browser you can see the Esmerald admin interface.
 
