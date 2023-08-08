@@ -7,11 +7,12 @@ from sqladmin import ModelView as SQLAModelView  # noqa
 from sqladmin._types import ENGINE_TYPE
 from sqladmin.authentication import AuthenticationBackend
 from sqladmin.models import BaseView as SQLAdminBaseView  # noqa
+from sqlalchemy.orm.session import sessionmaker
 from starlette.middleware import Middleware
 
 
 class EsmeraldBase:
-    def is_accessible(self, request: Request) -> bool:  # type: ignore
+    def is_accessible(self, request: Request) -> bool:
         raise ImproperlyConfigured(
             "The `is_accessible` is not used by Esmerald Admin, please use `has_permission` instead."
         )
@@ -44,6 +45,7 @@ class Admin(SQLAdmin):
         self,
         app: Esmerald,
         engine: ENGINE_TYPE,
+        session_maker: Optional[sessionmaker] = None,
         base_url: str = "/admin",
         title: str = "Esmerald Administration",
         logo_url: Optional[str] = None,
@@ -53,15 +55,16 @@ class Admin(SQLAdmin):
         authentication_backend: Optional[AuthenticationBackend] = None,
     ) -> None:
         super().__init__(
-            app,
-            engine,
-            base_url,
-            title,
-            logo_url,
-            middlewares,
-            debug,
-            templates_dir,
-            authentication_backend,
+            app=app,
+            engine=engine,
+            session_maker=session_maker,
+            base_url=base_url,
+            title=title,
+            logo_url=logo_url,
+            middlewares=middlewares,
+            debug=debug,
+            templates_dir=templates_dir,
+            authentication_backend=authentication_backend,
         )
 
         self.app.router.activate()  # type: ignore
@@ -70,32 +73,32 @@ class Admin(SQLAdmin):
         return super()._find_model_view(identity)  # type: ignore
 
     async def _list(self, request: Request) -> None:  # type: ignore
-        model_view = self._find_model_view(request.path_params["identity"])  # type: ignore
+        model_view = self._find_model_view(request.path_params["identity"])
         if not model_view.has_permission(request):
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
     async def _create(self, request: Request) -> None:  # type: ignore
-        model_view = self._find_model_view(request.path_params["identity"])  # type: ignore
+        model_view = self._find_model_view(request.path_params["identity"])
         if not model_view.can_create or not model_view.has_permission(request):
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
     async def _details(self, request: Request) -> None:  # type: ignore
-        model_view = self._find_model_view(request.path_params["identity"])  # type: ignore
+        model_view = self._find_model_view(request.path_params["identity"])
         if not model_view.can_view_details or not model_view.has_permission(request):
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
     async def _delete(self, request: Request) -> None:  # type: ignore
-        model_view = self._find_model_view(request.path_params["identity"])  # type: ignore
+        model_view = self._find_model_view(request.path_params["identity"])
         if not model_view.can_delete or not model_view.has_permission(request):
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
     async def _edit(self, request: Request) -> None:  # type: ignore
-        model_view = self._find_model_view(request.path_params["identity"])  # type: ignore
+        model_view = self._find_model_view(request.path_params["identity"])
         if not model_view.can_edit or not model_view.has_permission(request):
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
     async def _export(self, request: Request) -> None:  # type: ignore
-        model_view = self._find_model_view(request.path_params["identity"])  # type: ignore
+        model_view = self._find_model_view(request.path_params["identity"])
         if not model_view.can_export or not model_view.has_permission(request):
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
         if request.path_params["export_type"] not in model_view.export_types:

@@ -3,7 +3,7 @@ from datetime import datetime
 from esmerald import Request
 from saffier.exceptions import DoesNotFound
 
-from esmerald_admin.backends.base import BaseAuthentication
+from esmerald_admin.backends.saffier.base import BaseAuthentication
 
 DEFAULT_HEADER = "Bearer"
 
