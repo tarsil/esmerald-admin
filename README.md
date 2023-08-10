@@ -69,7 +69,7 @@ The custom, unique, Esmerald way is placed here within these docs.
 **For Saffier**
 
 ```shell
-$ pip install esmerald-admin
+$ pip install esmerald-admin[saffier]
 ```
 
 **For Edgy**
