@@ -1,5 +1,15 @@
 # Release Notes
 
+## 0.4.0
+
+### Added
+
+- Support for Python 3.12
+
+### Changed
+
+- Updated core dependencies.
+
 ## 0.3.0
 
 ### Changed
